@@ -1,0 +1,559 @@
+fileFormatVersion: 2
+guid: 9611dd85d286ddd42b07a7c1b3d4893c
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -1633938230492564595
+    second: DJ_Booth_Screen_Map_0
+  - first:
+      213: 3730439791023663169
+    second: DJ_Booth_Screen_Map_1
+  - first:
+      213: 805808716612024731
+    second: DJ_Booth_Screen_Map_2
+  - first:
+      213: -7319193243333030472
+    second: DJ_Booth_Screen_Map_3
+  - first:
+      213: 5668543999662208210
+    second: DJ_Booth_Screen_Map_4
+  - first:
+      213: -7026134134863333499
+    second: DJ_Booth_Screen_Map_5
+  - first:
+      213: 8567606426501755194
+    second: DJ_Booth_Screen_Map_6
+  - first:
+      213: 6850076999157451124
+    second: DJ_Booth_Screen_Map_7
+  - first:
+      213: -3073514537284397455
+    second: DJ_Booth_Screen_Map_8
+  - first:
+      213: 5175181293096704771
+    second: DJ_Booth_Screen_Map_9
+  - first:
+      213: -4944762460438417634
+    second: DJ_Booth_Screen_Map_10
+  - first:
+      213: -6590082865256874431
+    second: DJ_Booth_Screen_Map_11
+  - first:
+      213: -2028400425007357543
+    second: DJ_Booth_Screen_Map_12
+  - first:
+      213: 7606441515787418809
+    second: DJ_Booth_Screen_Map_13
+  - first:
+      213: -2541240268323927281
+    second: DJ_Booth_Screen_Map_14
+  - first:
+      213: 2314323236243197346
+    second: DJ_Booth_Screen_Map_15
+  - first:
+      213: -1622927286936165567
+    second: DJ_Booth_Screen_Map_16
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 0
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_0
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 763
+        width: 152
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d837f8a16d51359e0800000000000000
+      internalID: -1633938230492564595
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_1
+      rect:
+        serializedVersion: 2
+        x: 1452
+        y: 835
+        width: 193
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 148a2f7a93f25c330800000000000000
+      internalID: 3730439791023663169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_2
+      rect:
+        serializedVersion: 2
+        x: 1535
+        y: 779
+        width: 243
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b99b29622cece2b00800000000000000
+      internalID: 805808716612024731
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_3
+      rect:
+        serializedVersion: 2
+        x: 1585
+        y: 615
+        width: 308
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8bd02b026800d6a90800000000000000
+      internalID: -7319193243333030472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_4
+      rect:
+        serializedVersion: 2
+        x: 1660
+        y: 836
+        width: 199
+        height: 194
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2d4b9850cb6baae40800000000000000
+      internalID: 5668543999662208210
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_5
+      rect:
+        serializedVersion: 2
+        x: 1431
+        y: 678
+        width: 228
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 587793bfa382e7e90800000000000000
+      internalID: -7026134134863333499
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1194
+        height: 672
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a31bdfad6a046e670800000000000000
+      internalID: 8567606426501755194
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_7
+      rect:
+        serializedVersion: 2
+        x: 1543
+        y: 477
+        width: 60
+        height: 116
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4798adaccbc501f50800000000000000
+      internalID: 6850076999157451124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_8
+      rect:
+        serializedVersion: 2
+        x: 1609
+        y: 414
+        width: 122
+        height: 241
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1761a2100dea855d0800000000000000
+      internalID: -3073514537284397455
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_9
+      rect:
+        serializedVersion: 2
+        x: 1618
+        y: 542
+        width: 241
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 30b964f77ffe1d740800000000000000
+      internalID: 5175181293096704771
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_10
+      rect:
+        serializedVersion: 2
+        x: 1585
+        y: 224
+        width: 308
+        height: 229
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1fa1ee9dbca06bb0800000000000000
+      internalID: -4944762460438417634
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_11
+      rect:
+        serializedVersion: 2
+        x: 1618
+        y: 405
+        width: 241
+        height: 122
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14eb9ffbc825b84a0800000000000000
+      internalID: -6590082865256874431
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_12
+      rect:
+        serializedVersion: 2
+        x: 1348
+        y: 154
+        width: 152
+        height: 152
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9916f257f8ca9d3e0800000000000000
+      internalID: -2028400425007357543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_13
+      rect:
+        serializedVersion: 2
+        x: 1431
+        y: 237
+        width: 229
+        height: 154
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9bcfa4902428f8960800000000000000
+      internalID: 7606441515787418809
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_14
+      rect:
+        serializedVersion: 2
+        x: 1535
+        y: 125
+        width: 243
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f0b42a5a073bbbcd0800000000000000
+      internalID: -2541240268323927281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_15
+      rect:
+        serializedVersion: 2
+        x: 1452
+        y: 41
+        width: 193
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ad45b7b8b02e1020800000000000000
+      internalID: 2314323236243197346
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: DJ_Booth_Screen_Map_16
+      rect:
+        serializedVersion: 2
+        x: 1660
+        y: 39
+        width: 199
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 143a1ed2b343a79e0800000000000000
+      internalID: -1622927286936165567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      DJ_Booth_Screen_Map_0: -1633938230492564595
+      DJ_Booth_Screen_Map_1: 3730439791023663169
+      DJ_Booth_Screen_Map_10: -4944762460438417634
+      DJ_Booth_Screen_Map_11: -6590082865256874431
+      DJ_Booth_Screen_Map_12: -2028400425007357543
+      DJ_Booth_Screen_Map_13: 7606441515787418809
+      DJ_Booth_Screen_Map_14: -2541240268323927281
+      DJ_Booth_Screen_Map_15: 2314323236243197346
+      DJ_Booth_Screen_Map_16: -1622927286936165567
+      DJ_Booth_Screen_Map_2: 805808716612024731
+      DJ_Booth_Screen_Map_3: -7319193243333030472
+      DJ_Booth_Screen_Map_4: 5668543999662208210
+      DJ_Booth_Screen_Map_5: -7026134134863333499
+      DJ_Booth_Screen_Map_6: 8567606426501755194
+      DJ_Booth_Screen_Map_7: 6850076999157451124
+      DJ_Booth_Screen_Map_8: -3073514537284397455
+      DJ_Booth_Screen_Map_9: 5175181293096704771
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
