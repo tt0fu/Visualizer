@@ -47,7 +47,7 @@ Shader "Oklab radial rainbow" {
 
             #include "Oklab rainbow.cginc"
 
-            fixed4 frag(frag_data i) : SV_Target {
+            float4 frag(frag_data i) : SV_Target {
                 float2 p = i.uv - float2(0.5, 0.5);
                 float t = _Time.y * _TimeScale + chrono * _ChronoScale;
                 float hue = (length(p) - t) * _RainbowScale;

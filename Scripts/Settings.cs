@@ -1,4 +1,7 @@
 ﻿using UnityEngine;
+using Unity.Burst;
+
+[BurstCompile(CompileSynchronously = true)]
 public class Settings : MonoBehaviour
 {
     public bool limitFps = true;

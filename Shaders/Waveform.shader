@@ -42,8 +42,10 @@ Shader "Waveform" {
             #pragma fragment frag
             Buffer<float> samples;
             uint samples_size;
+            uint samples_start;
             float period;
             float focus;
+            float middle;
             float scale_x;
             float chrono;
 
@@ -58,6 +60,7 @@ Shader "Waveform" {
             float _ChronoScale;
 
             float get_raw_sample(int sample_index) {
+                sample_index += middle - samples_size * focus;
                 if (sample_index < 0) {
                     sample_index += period * ceil((0 - sample_index) / period);
                 }
@@ -65,7 +68,7 @@ Shader "Waveform" {
                     sample_index -= period * ceil((sample_index - samples_size + 1) / period);
                 }
 
-                return samples.Load(sample_index) * _Height;
+                return samples.Load((sample_index + samples_start) % samples_size) * _Height;
             }
 
             float get_sample(float sample_index) {

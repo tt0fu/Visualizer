@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.Shader;
+using Unity.Burst;
 
+[BurstCompile(CompileSynchronously = true)]
 [RequireComponent(typeof(Image))]
 public class ScaleXSetter : MonoBehaviour
 {
@@ -12,6 +14,10 @@ public class ScaleXSetter : MonoBehaviour
     private void Start()
     {
         _image = GetComponent<Image>();
+    }
+
+    private void Update()
+    {
         var rect = _image.rectTransform.rect;
         _image.material.SetFloat(ScaleXid, rect.width / rect.height);
     }

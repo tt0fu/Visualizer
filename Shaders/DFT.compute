@@ -10,8 +10,12 @@ float lowest_frequency;
 uint dft_iteration_count;
 StructuredBuffer<float> samples;
 uint samples_size;
+uint samples_start;
 RWStructuredBuffer<float> dft;
 
+float get_sample(uint index) {
+    return samples.Load((index + samples_start) % samples_size);
+}
 
 float calculate_dft(int note) {
     float2 amplitude = 0;
@@ -21,12 +25,13 @@ float calculate_dft(int note) {
     float halfWindowSize = 4.0 / (phase_delta / UNITY_TWO_PI);
     float totalWindow = 0;
     for (uint sample_index = 0; sample_index < dft_iteration_count; sample_index++) {
-        float window = max(0, (dft_iteration_count - sample_index) * (2 - (dft_iteration_count - sample_index) / (halfWindowSize)));
+        float window = max(
+            0, (dft_iteration_count - sample_index) * (2 - (dft_iteration_count - sample_index) / (halfWindowSize)));
 
         float2 sinCos;
         sincos(phase, sinCos.x, sinCos.y);
 
-        amplitude += sinCos * samples.Load(samples_size - sample_index - 1) * window;
+        amplitude += sinCos * get_sample(samples_size - sample_index - 1) * window;
         totalWindow += window;
         phase += phase_delta;
     }

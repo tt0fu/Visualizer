@@ -1,7 +1,9 @@
 using System;
 using UnityEngine;
 using static UnityEngine.Shader;
+using Unity.Burst;
 
+[BurstCompile(CompileSynchronously = true)]
 [RequireComponent(typeof(AudioReader))]
 public class KeyboardControls : MonoBehaviour
 {

@@ -37,7 +37,7 @@ Material:
     - _Rainbow: 1
     - _RainbowScale: 1
     - _TimeScale: 0.1
-    - _Width: 20
+    - _Width: 15
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1
