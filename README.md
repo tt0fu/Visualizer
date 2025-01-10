@@ -1,4 +1,4 @@
-<video src='https://github.com/tt0fu/Visualizer/raw/refs/heads/main/preview.mp4' width=180></video>
+[![Preview](https://i.sstatic.net/Vp2cE.png)](https://youtu.be/b6NJmzAMD6g)
  
  # Installation
 
