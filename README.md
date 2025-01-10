@@ -1,4 +1,5 @@
-![](preview.mp4)
+<video src='https://github.com/tt0fu/Visualizer/raw/refs/heads/main/preview.mp4' width=180/>
+ 
  # Installation
 
 [Latest release](https://github.com/tt0fu/Visualizer/releases/latest)
