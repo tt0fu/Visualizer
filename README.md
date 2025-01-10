@@ -1,4 +1,5 @@
-﻿# Installation
+![](preview.mp4)
+ # Installation
 
 [Latest release](https://github.com/tt0fu/Visualizer/releases/latest)
 
