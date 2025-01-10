@@ -261,7 +261,8 @@ MonoBehaviour:
   dftMaterials: []
   waveformMaterials:
   - {fileID: 2100000, guid: 5fe079b5ef0844a4c94b2a807127e1e6, type: 2}
-  chronoMaterials: []
+  chronoMaterials:
+  - {fileID: 2100000, guid: 5fe079b5ef0844a4c94b2a807127e1e6, type: 2}
   samplesSize: 4096
   dftComputeShader: {fileID: 7200000, guid: 4f3e1b8a172a74440ac404a8547ada74, type: 3}
   waveScale: 1
