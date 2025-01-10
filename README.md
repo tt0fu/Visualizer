@@ -1,4 +1,4 @@
-[![Preview](https://img.youtube.com/vi/b6NJmzAMD6g/maxresdefault.jpg)](https://youtu.be/b6NJmzAMD6g)
+https://github.com/user-attachments/assets/b2039d59-2a7c-4b4d-8d20-4a014e7526ef
 
 # Installation
 
@@ -17,3 +17,4 @@ This app picks up audio from the microphone device selected in your OS's setting
 - Use up/down arrow keys to change the waveform scale.
 - Use left/right arrow keys to change the waveform line thickness.
 - Press f1 to enable the center (red) and period (green) lines.
+
