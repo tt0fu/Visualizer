@@ -1,7 +1,8 @@
 ﻿using Unity.Burst;
+using Unity.Collections;
 
 [BurstCompile(CompileSynchronously = true)]
-public class CircularArray<T>
+public class CircularArray<T> where T : struct
 {
     public readonly T[] Array;
     private int Size { get; }
@@ -21,6 +22,16 @@ public class CircularArray<T>
     }
 
     public void Add(T[] items)
+    {
+        for (var i = 0; i < items.Length; i++)
+        {
+            Array[(Start + i) % Size] = items[i];
+        }
+
+        Start = (Start + items.Length) % Size;
+    }
+
+    public void Add(NativeSlice<T> items)
     {
         for (var i = 0; i < items.Length; i++)
         {

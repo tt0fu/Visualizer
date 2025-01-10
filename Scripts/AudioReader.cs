@@ -1,9 +1,6 @@
-using System;
 using Lasp;
-using Unity.Mathematics;
 using UnityEngine;
 using static UnityEngine.Shader;
-using System.Threading.Tasks;
 using Unity.Burst;
 
 [BurstCompile(CompileSynchronously = true)]
@@ -32,22 +29,23 @@ public class AudioReader : MonoBehaviour
     private float[] _dft;
     private CircularArray<float> _samples;
     private float _chrono;
+    private float _period;
+    private float _centerSample;
     private ComputeBuffer _dftBuffer;
     private ComputeBuffer _samplesBuffer;
 
 
-    public Material[] dftMaterials;
-    public Material[] waveformMaterials;
-    public Material[] chronoMaterials;
+    [SerializeField] private Material[] dftMaterials;
+    [SerializeField] private Material[] waveformMaterials;
+    [SerializeField] private Material[] chronoMaterials;
 
-    public int samplesSize = 4096;
-    public ComputeShader dftComputeShader;
-    [Range(1, 128)] public int searchIterations = 16;
-    [Range(0.0f, 10f)] public float waveScale = 2.5f;
-    [Range(0.0f, 1.0f)] public float focusPoint = 0.5f;
-    [Range(1, 4096)] public int dftIterationCount = 4096;
-    [Range(0.0f, 100.0f)] public float chronoThreshold = 15f;
-    [Range(0.0f, 1.0f)] public float chronoRightBorder = 0.1f;
+    [SerializeField] private int samplesSize = 4096;
+    [SerializeField] private ComputeShader dftComputeShader;
+
+    [SerializeField] [Range(0.0f, 10f)] public float waveScale = 2.5f;
+
+    [SerializeField] [Range(0.0f, 1.0f)] private float focusPoint = 0.5f;
+    [SerializeField] [Range(1, 4096)] private int dftIterationCount = 4096;
 
 
     private void Start()
@@ -61,6 +59,8 @@ public class AudioReader : MonoBehaviour
         _samples = new CircularArray<float>(_samplesSize);
         _lowestFrequency = _sampleRate / _samplesSize;
         _chrono = 0;
+        _period = 1000;
+        _centerSample = _samplesSize * focusPoint;
 
         _dftBuffer = new ComputeBuffer(_dftSize, sizeof(float));
         _samplesBuffer = new ComputeBuffer(_samplesSize, sizeof(float));
@@ -72,79 +72,77 @@ public class AudioReader : MonoBehaviour
         _samplesBuffer.Release();
     }
 
+
     private float GetSample(float index)
     {
-        index = (float.IsNaN(index) || float.IsInfinity(index)) ? 0 : Math.Clamp(index, 1, _samplesSize - 2);
-        var left = _samples[(int)Math.Floor(index)];
-        var right = _samples[(int)Math.Ceiling(index)];
-        var frac = index - (float)Math.Floor(index);
+        index = (float.IsNaN(index) || float.IsInfinity(index)) ? 0 : Mathf.Clamp(index, 1, _samplesSize - 2);
+        var left = _samples[(int)Mathf.Floor(index)];
+        var right = _samples[(int)Mathf.Ceil(index)];
+        var frac = index - Mathf.Floor(index);
         return left * (1 - frac) + right * frac;
     }
 
-    private float GetSample(float index, float period)
+    private float GetPeriodicSample(float index)
     {
         if (index < 0)
         {
-            index += period * (float)Math.Ceiling((-index - 1) / period);
+            index += _period * Mathf.Ceil((-index - 1) / _period);
         }
 
         if (index >= samplesSize)
         {
-            index -= period * (float)Math.Ceiling((index - samplesSize + 1) / period);
+            index -= _period * Mathf.Ceil((index - samplesSize + 1) / _period);
         }
 
         return GetSample(index);
     }
 
-    private float CenterSample(float start, float period)
+    private void UpdateCenterSample()
     {
-        var left = start - period / 2;
-        var right = start + period / 2;
-        for (var i = 0; i < searchIterations; i++)
+        var start = _samplesSize * focusPoint;
+        var begin = start;
+        for (; GetPeriodicSample(begin) < 0 && begin < start + _period; begin += _period / 8)
         {
-            var middle1 = left + (right - left) / 3;
-            var middle2 = right - (right - left) / 3;
-            if (GetSample(middle1, period) > GetSample(middle2, period))
-            {
-                right = middle1;
-            }
-            else
-            {
-                left = middle2;
-            }
         }
 
-        left = right - (period / 2);
-
-        for (var i = 0; i < searchIterations; i++)
+        for (; GetPeriodicSample(begin) > 0 && begin > start - _period; begin -= _period / 8)
         {
-            var middle = (right + left) / 2;
-            if (GetSample(middle) < 0)
-            {
-                left = middle;
-            }
-            else
-            {
-                right = middle;
-            }
         }
 
-        return left;
+        var mx = GetPeriodicSample(begin);
+        var mxSample = begin;
+        for (var sample = begin; sample < begin + _period; sample++)
+        {
+            var cur = GetPeriodicSample(sample);
+            if (cur * 0.95 <= mx) continue;
+            mx = cur;
+            mxSample = sample;
+        }
+
+        var right = mxSample;
+        var left = right - 1;
+        var sum = GetPeriodicSample(right);
+        for (; left > right - _period && sum > 0; left--)
+        {
+            sum += GetPeriodicSample(left);
+        }
+
+        _centerSample = (left + right) / 2;
     }
 
     private float GetFrequency(float bin)
     {
-        return (float)Math.Pow(2, bin / _expBins) * _lowestFrequency;
+        return Mathf.Pow(2, bin / _expBins) * _lowestFrequency;
     }
 
-    private float PeriodFromDft()
+    private void UpdatePeriod()
     {
         var max = 0.0f;
         var maxBin = 100f;
         for (var i = 0; i < _dftSize; i++)
         {
             var cur = _dft[i] * (_dftSize - i);
-            if (!(cur > max))
+            if (cur <= max)
             {
                 continue;
             }
@@ -153,20 +151,24 @@ public class AudioReader : MonoBehaviour
             maxBin = i;
         }
 
-        return _sampleRate / GetFrequency(maxBin);
+        _period = _sampleRate / GetFrequency(maxBin);
     }
 
-    private void Update()
+    private void UpdateSamples()
     {
-        var newSamples = _tracker.audioDataSlice.ToArray();
+        var newSamples = _tracker.audioDataSlice;
         for (var i = 0; i < newSamples.Length; i++)
         {
             newSamples[i] *= waveScale;
         }
 
         _samples.Add(newSamples);
-        _expBins = (int)Math.Floor(_dftSize / Math.Log(_sampleRate / (2 * _lowestFrequency), 2));
         _samplesBuffer.SetData(_samples.Array);
+    }
+
+    private void UpdateDft()
+    {
+        _expBins = (int)Mathf.Floor(_dftSize / Mathf.Log(_sampleRate / (2 * _lowestFrequency), 2));
 
         dftComputeShader.SetFloat(ExpBinsID, _expBins);
         dftComputeShader.SetFloat(SampleRateID, _sampleRate);
@@ -180,19 +182,24 @@ public class AudioReader : MonoBehaviour
         dftComputeShader.SetBuffer(0, DftID, _dftBuffer);
         dftComputeShader.Dispatch(0, _dftSize, 1, 1);
         _dftBuffer.GetData(_dft);
+    }
 
-        var period = PeriodFromDft();
+    private void UpdateChrono()
+    {
+        _tracker.gain = 10 * Mathf.Log10(waveScale);
         _chrono += Time.deltaTime * _tracker.normalizedLevel;
-        var middle = CenterSample(_samplesSize * focusPoint, period);
+    }
 
+    private void UpdateMaterials()
+    {
         foreach (var material in waveformMaterials)
         {
             material.SetBuffer(SamplesID, _samplesBuffer);
             material.SetInteger(SamplesSizeID, _samplesSize);
             material.SetInt(SamplesStartID, _samples.Start);
-            material.SetFloat(PeriodID, period);
+            material.SetFloat(PeriodID, _period);
             material.SetFloat(FocusID, focusPoint);
-            material.SetFloat(MiddleID, middle);
+            material.SetFloat(MiddleID, _centerSample);
         }
 
         foreach (var material in dftMaterials)
@@ -205,5 +212,15 @@ public class AudioReader : MonoBehaviour
         {
             material.SetFloat(ChronoID, _chrono);
         }
+    }
+
+    private void Update()
+    {
+        UpdateSamples();
+        UpdateDft();
+        UpdatePeriod();
+        UpdateCenterSample();
+        UpdateChrono();
+        UpdateMaterials();
     }
 }
