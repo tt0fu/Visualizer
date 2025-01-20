@@ -16,4 +16,5 @@ This app picks up audio from the microphone device selected in your OS's setting
 
 - Use up/down arrow keys to change the waveform scale.
 - Use left/right arrow keys to change the waveform line thickness.
-- Press f1 to enable the center (red) and period (green) lines.
+- Press f1 to toggle the center (red) and period (green) lines.
+- Press f2 to toggle waveform stabilization.

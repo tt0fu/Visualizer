@@ -4,6 +4,7 @@ Shader "Waveform" {
         _Width ("Width", Range(1, 200)) = 20
         _Height ("Height", Range(0, 10)) = 1.0
         [ToggleUI] _Debug ("Debug mode", Int) = 0
+        [ToggleUI] _DisableStabilization ("Disable stabilization", Int) = 0
         [ToggleUI] _Rainbow ("Rainbow", Int) = 0
         _Lightness("Lightness", Range(0, 2)) = 0.5
         _Chroma("Chroma", Range(0, 2)) = 0.5
@@ -45,13 +46,14 @@ Shader "Waveform" {
             uint samples_start;
             float period;
             float focus;
-            float middle;
+            float center_sample;
             float scale_x;
             float chrono;
 
             float _Width;
             float _Height;
             bool _Debug;
+            bool _DisableStabilization;
             bool _Rainbow;
             float _Lightness;
             float _Chroma;
@@ -60,7 +62,9 @@ Shader "Waveform" {
             float _ChronoScale;
 
             float get_raw_sample(int sample_index) {
-                sample_index += middle - samples_size * focus;
+                if (!_DisableStabilization) {
+                    sample_index += center_sample - samples_size * focus;
+                }
                 if (sample_index < 0) {
                     sample_index += period * ceil((0 - sample_index) / period);
                 }
@@ -136,10 +140,12 @@ Shader "Waveform" {
                 float3 col = base_col * fade(wave_distance(pixel.uv) * samples_size / _Width);
                 if (_Debug) {
                     float sample_index = pixel.uv.x * samples_size;
-                    float focus_sample = samples_size * focus;
-                    col += debug_bar(sample_index, focus_sample, float3(1, 0, 0));
-                    col += debug_bar(sample_index, focus_sample - period / 2, float3(0, 1, 0));
-                    col += debug_bar(sample_index, focus_sample + period / 2, float3(0, 1, 0));
+                    if (!_DisableStabilization) {
+                        sample_index += center_sample - samples_size * focus;
+                    }
+                    col += debug_bar(sample_index, center_sample, float3(1, 0, 0));
+                    col += debug_bar(sample_index, center_sample - period / 2, float3(0, 1, 0));
+                    col += debug_bar(sample_index, center_sample + period / 2, float3(0, 1, 0));
                 }
                 return float4(col, 1);
             }

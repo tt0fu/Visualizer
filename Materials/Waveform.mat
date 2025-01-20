@@ -32,12 +32,13 @@ Material:
     - _Chroma: 0.1
     - _ChronoScale: 2
     - _Debug: 0
+    - _DisableStabilization: 0
     - _Height: 1
     - _Lightness: 0.7
     - _Rainbow: 1
     - _RainbowScale: 1
     - _TimeScale: 0.1
-    - _Width: 15
+    - _Width: 10
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

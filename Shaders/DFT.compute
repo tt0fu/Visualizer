@@ -11,16 +11,16 @@ uint dft_iteration_count;
 StructuredBuffer<float> samples;
 uint samples_size;
 uint samples_start;
-RWStructuredBuffer<float> dft;
+RWStructuredBuffer<float3> dft;
 
 float get_sample(uint index) {
     return samples.Load((index + samples_start) % samples_size);
 }
 
-float calculate_dft(int note) {
+void calculate_dft(int note) {
     float2 amplitude = 0;
     float phase_delta = ((pow(2, note / exp_bins) * lowest_frequency) / sample_rate) * UNITY_TWO_PI;
-    float phase = -phase_delta * dft_iteration_count;
+    float cur_phase = -phase_delta * dft_iteration_count;
 
     float halfWindowSize = 4.0 / (phase_delta / UNITY_TWO_PI);
     float totalWindow = 0;
@@ -29,17 +29,17 @@ float calculate_dft(int note) {
             0, (dft_iteration_count - sample_index) * (2 - (dft_iteration_count - sample_index) / (halfWindowSize)));
 
         float2 sinCos;
-        sincos(phase, sinCos.x, sinCos.y);
+        sincos(cur_phase, sinCos.x, sinCos.y);
 
         amplitude += sinCos * get_sample(samples_size - sample_index - 1) * window;
         totalWindow += window;
-        phase += phase_delta;
+        cur_phase += phase_delta;
     }
-    return length(amplitude) / totalWindow;
+    dft[note] = float3(length(amplitude) / totalWindow, amplitude);
 }
 
 [numthreads(X,Y,Z)]
 void CSMain(uint3 id : SV_DispatchThreadID) {
     uint index = id.x + id.y * X + id.z * X * Y;
-    dft[index] = calculate_dft(index);
+    calculate_dft(index);
 }

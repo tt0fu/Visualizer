@@ -9,6 +9,7 @@ public class KeyboardControls : MonoBehaviour
 {
     private static readonly int WidthID = PropertyToID("_Width");
     private static readonly int DebugID = PropertyToID("_Debug");
+    private static readonly int DisableStabilizationID = PropertyToID("_DisableStabilization");
     public Material waveformMaterial;
     private AudioReader _audioReader;
 
@@ -39,7 +40,10 @@ public class KeyboardControls : MonoBehaviour
                 waveformMaterial.SetFloat(WidthID, Math.Clamp(value, 0, 200));
                 break;
             case KeyCode.F1:
-                waveformMaterial.SetFloat(DebugID, 1 - waveformMaterial.GetInt(DebugID));
+                waveformMaterial.SetInt(DebugID, 1 - waveformMaterial.GetInt(DebugID));
+                break;
+            case KeyCode.F2:
+                waveformMaterial.SetInt(DisableStabilizationID, 1 - waveformMaterial.GetInt(DisableStabilizationID));
                 break;
             default:
                 return;
