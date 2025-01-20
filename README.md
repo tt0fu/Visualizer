@@ -1,4 +1,4 @@
-[![Preview](https://img.youtube.com/vi/b6NJmzAMD6g/maxresdefault.jpg)](https://youtu.be/b6NJmzAMD6g)
+https://github.com/user-attachments/assets/a330d197-b90c-452c-93c2-ebb726f5869b
 
 # Installation
 
