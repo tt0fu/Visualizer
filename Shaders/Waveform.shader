@@ -21,13 +21,13 @@ Shader "Waveform" {
         float4 vertex : POSITION;
     };
 
-    struct frag_data {
+    struct FragData {
         float2 uv : TEXCOORD0;
         float4 vertex : SV_POSITION;
     };
 
-    frag_data vert(appdata vertex) {
-        frag_data pixel;
+    FragData vert(appdata vertex) {
+        FragData pixel;
         pixel.vertex = UnityObjectToClipPos(vertex.vertex);
         pixel.uv = vertex.uv;
         return pixel;
@@ -42,12 +42,12 @@ Shader "Waveform" {
             CGPROGRAM
             #pragma fragment frag
             Buffer<float> samples;
-            uint samples_size;
-            uint samples_start;
+            uint samplesSize;
+            uint samplesStart;
             float period;
             float focus;
-            float center_sample;
-            float scale_x;
+            float centerSample;
+            float scaleX;
             float chrono;
 
             float _Width;
@@ -61,39 +61,37 @@ Shader "Waveform" {
             float _TimeScale;
             float _ChronoScale;
 
-            float get_raw_sample(int sample_index) {
+            float RawSample(int sample_index) {
                 if (!_DisableStabilization) {
-                    sample_index += center_sample - samples_size * focus;
+                    sample_index += centerSample - samplesSize * focus;
                 }
                 if (sample_index < 0) {
                     sample_index += period * ceil((0 - sample_index) / period);
                 }
-                if (sample_index >= samples_size) {
-                    sample_index -= period * ceil((sample_index - samples_size + 1) / period);
+                if (sample_index >= samplesSize) {
+                    sample_index -= period * ceil((sample_index - samplesSize + 1) / period);
                 }
 
-                return samples.Load((sample_index + samples_start) % samples_size) * _Height;
+                return samples.Load((sample_index + samplesStart) % samplesSize) * _Height;
             }
 
-            float get_sample(float sample_index) {
-                float sample_left = get_raw_sample(floor(sample_index));
-                float sample_right = get_raw_sample(ceil(sample_index));
-                return lerp(sample_left, sample_right, frac(sample_index));
+            float Sample(float sample_index) {
+                return lerp(RawSample(floor(sample_index)), RawSample(ceil(sample_index)), frac(sample_index));
             }
 
-            float fade(const float dist) {
+            float Fade(const float dist) {
                 const float x = clamp(dist, 0, 1);
                 return 1 - sqrt(1 - (x - 1) * (x - 1));
             }
 
-            float pseudo_cross(float2 a, float2 b) {
+            float PseudoCross(float2 a, float2 b) {
                 return a.x * b.y - b.x * a.y;
             }
 
-            float point_to_segment_dist(float2 p1, float2 p2, float2 a) {
-                p1.x *= scale_x;
-                p2.x *= scale_x;
-                a.x *= scale_x;
+            float PointToSegment(float2 p1, float2 p2, float2 a) {
+                p1.x *= scaleX;
+                p2.x *= scaleX;
+                a.x *= scaleX;
                 float2 ap1 = p1 - a;
                 float2 ap2 = p2 - a;
                 float2 p1p2 = p2 - p1;
@@ -103,49 +101,49 @@ Shader "Waveform" {
                 if (length(p1p2) < 1e-12) {
                     return length(ap1);
                 }
-                return abs(pseudo_cross(ap1, ap2)) / length(p1p2);
+                return abs(PseudoCross(ap1, ap2)) / length(p1p2);
             }
 
-            float2 uv_point(float sample_index) {
-                return float2(sample_index / samples_size, get_sample(sample_index) / 2 + 0.5);
+            float2 UVPoint(float sampleIndex) {
+                return float2(sampleIndex / samplesSize, Sample(sampleIndex) / 2 + 0.5);
             }
 
-            float wave_distance(const float2 uv) {
-                float sample_index = uv.x * samples_size;
-                const int start_index = floor(sample_index - _Width);
-                const int end_index = ceil(sample_index + _Width);
+            float WaveDistance(const float2 uv) {
+                float sampleIndex = uv.x * samplesSize;
+                const int startIndex = floor(sampleIndex - _Width);
+                const int endIndex = ceil(sampleIndex + _Width);
                 float mn = 10;
-                float2 last = uv_point(start_index);
-                for (int index = start_index + 1; index < end_index; index++) {
-                    const float2 cur = uv_point(index);
-                    mn = min(mn, point_to_segment_dist(cur, last, uv));
+                float2 last = UVPoint(startIndex);
+                for (int index = startIndex + 1; index < endIndex; index++) {
+                    const float2 cur = UVPoint(index);
+                    mn = min(mn, PointToSegment(cur, last, uv));
                     last = cur;
                 }
                 return mn;
             }
 
-            float3 debug_bar(float sample_index, float target, float3 color) {
-                return color * fade(abs(sample_index - target) * scale_x / _Width);
+            float3 DebugBarColor(float sample_index, float target, float3 color) {
+                return color * Fade(abs(sample_index - target) * scaleX / _Width);
             }
 
             #include "Oklab rainbow.cginc"
 
-            float4 frag(frag_data pixel) :SV_Target {
-                float3 base_col = float3(1, 1, 1);
+            float4 frag(FragData pixel) :SV_Target {
+                float3 baseCol = float3(1, 1, 1);
                 if (_Rainbow) {
                     float t = _Time.y * _TimeScale + chrono * _ChronoScale;
                     float hue = (pixel.uv.x - t) * _RainbowScale;
-                    base_col = rainbow(hue);
+                    baseCol = rainbow(hue);
                 }
-                float3 col = base_col * fade(wave_distance(pixel.uv) * samples_size / _Width);
+                float3 col = baseCol * Fade(WaveDistance(pixel.uv) * samplesSize / _Width);
                 if (_Debug) {
-                    float sample_index = pixel.uv.x * samples_size;
+                    float sampleIndex = pixel.uv.x * samplesSize;
                     if (!_DisableStabilization) {
-                        sample_index += center_sample - samples_size * focus;
+                        sampleIndex += centerSample - samplesSize * focus;
                     }
-                    col += debug_bar(sample_index, center_sample, float3(1, 0, 0));
-                    col += debug_bar(sample_index, center_sample - period / 2, float3(0, 1, 0));
-                    col += debug_bar(sample_index, center_sample + period / 2, float3(0, 1, 0));
+                    col += DebugBarColor(sampleIndex, centerSample, float3(1, 0, 0));
+                    col += DebugBarColor(sampleIndex, centerSample - period / 2, float3(0, 1, 0));
+                    col += DebugBarColor(sampleIndex, centerSample + period / 2, float3(0, 1, 0));
                 }
                 return float4(col, 1);
             }

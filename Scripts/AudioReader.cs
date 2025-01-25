@@ -11,23 +11,22 @@ public class AudioReader : MonoBehaviour
     private AudioLevelTracker _tracker;
     private float _sampleRate;
     private static readonly int DftID = PropertyToID("dft");
-    private static readonly int DftsSizeID = PropertyToID("dft_size");
+    private static readonly int DftsSizeID = PropertyToID("dftSize");
     private static readonly int SamplesID = PropertyToID("samples");
-    private static readonly int SamplesSizeID = PropertyToID("samples_size");
-    private static readonly int SamplesStartID = PropertyToID("samples_start");
+    private static readonly int SamplesSizeID = PropertyToID("samplesSize");
+    private static readonly int SamplesStartID = PropertyToID("samplesStart");
     private static readonly int PeriodID = PropertyToID("period");
     private static readonly int FocusID = PropertyToID("focus");
-    private static readonly int CenterSampleID = PropertyToID("center_sample");
-    private static readonly int ExpBinsID = PropertyToID("exp_bins");
-    private static readonly int SampleRateID = PropertyToID("sample_rate");
-    private static readonly int LowestFrequencyID = PropertyToID("lowest_frequency");
-    private static readonly int DftIterationCountID = PropertyToID("dft_iteration_count");
+    private static readonly int CenterSampleID = PropertyToID("centerSample");
+    private static readonly int ExpBinsID = PropertyToID("expBins");
+    private static readonly int SampleRateID = PropertyToID("sampleRate");
+    private static readonly int LowestFrequencyID = PropertyToID("lowestFrequency");
     private static readonly int ChronoID = PropertyToID("chrono");
     private int _dftSize;
     private int _samplesSize;
     private float _lowestFrequency;
     private int _expBins;
-    private float3[] _dft;
+    private float2[] _dft;
     private CircularArray<float> _samples;
     private float _chrono;
     private float _period;
@@ -47,7 +46,7 @@ public class AudioReader : MonoBehaviour
     [SerializeField] [Range(0.0f, 10f)] public float waveScale = 2.5f;
 
     [SerializeField] [Range(0.0f, 1.0f)] private float focusPoint = 0.5f;
-    [SerializeField] [Range(1, 4096)] private int dftIterationCount = 4096;
+    [SerializeField] [Range(1, 4096)] private int dftSize = 512;
 
 
     private void Start()
@@ -55,9 +54,9 @@ public class AudioReader : MonoBehaviour
         _tracker = GetComponent<AudioLevelTracker>();
         _samplesSize = samplesSize;
         _sampleRate = AudioSystem.DefaultDevice.SampleRate;
-        _dftSize = 512;
+        _dftSize = dftSize;
         _samplesSize = samplesSize;
-        _dft = new float3[_dftSize];
+        _dft = new float2[_dftSize];
         _samples = new CircularArray<float>(_samplesSize);
         _lowestFrequency = _sampleRate / _samplesSize;
         _chrono = 0;
@@ -65,7 +64,7 @@ public class AudioReader : MonoBehaviour
         _phase = new float2(0, 0);
         _centerSample = _samplesSize * focusPoint;
 
-        _dftBuffer = new ComputeBuffer(_dftSize, sizeof(float) * 3);
+        _dftBuffer = new ComputeBuffer(_dftSize, sizeof(float) * 2);
         _samplesBuffer = new ComputeBuffer(_samplesSize, sizeof(float));
     }
 
@@ -77,13 +76,8 @@ public class AudioReader : MonoBehaviour
 
     private void UpdateCenterSample()
     {
-        var angle = Mathf.Atan2(_phase.y, _phase.x) / (Mathf.PI * 2) + 0.5f;
-        _centerSample = (angle + Mathf.Floor(samplesSize * focusPoint / _period)) * _period;
-    }
-
-    private float GetFrequency(float bin)
-    {
-        return Mathf.Pow(2, bin / _expBins) * _lowestFrequency;
+        var angle = Mathf.Atan2(_phase.y, _phase.x) / (Mathf.PI * 2) - 0.25f;
+        _centerSample = (angle + Mathf.Ceil(samplesSize * focusPoint / _period)) * _period;
     }
 
     private void UpdatePeriod()
@@ -92,7 +86,7 @@ public class AudioReader : MonoBehaviour
         var maxBin = _dftSize;
         for (var i = 0; i < _dftSize; i++)
         {
-            var cur = _dft[i].x * (_dftSize - i);
+            var cur = math.length(_dft[i]);
             if (cur < max)
             {
                 continue;
@@ -102,8 +96,10 @@ public class AudioReader : MonoBehaviour
             maxBin = i;
         }
 
-        _period = _sampleRate / GetFrequency(maxBin);
-        _phase = _dft[maxBin].yz;
+        var frequency = Mathf.Pow(2, (float)maxBin / _expBins) * _lowestFrequency;
+
+        _period = _sampleRate / frequency;
+        _phase = _dft[maxBin];
     }
 
     private void UpdateSamples()
@@ -125,7 +121,6 @@ public class AudioReader : MonoBehaviour
         dftComputeShader.SetFloat(ExpBinsID, _expBins);
         dftComputeShader.SetFloat(SampleRateID, _sampleRate);
         dftComputeShader.SetFloat(LowestFrequencyID, _lowestFrequency);
-        dftComputeShader.SetFloat(DftIterationCountID, dftIterationCount);
 
         dftComputeShader.SetBuffer(0, SamplesID, _samplesBuffer);
         dftComputeShader.SetInt(SamplesSizeID, _samplesSize);
@@ -158,6 +153,8 @@ public class AudioReader : MonoBehaviour
         {
             material.SetBuffer(DftID, _dftBuffer);
             material.SetInteger(DftsSizeID, _dftSize);
+            material.SetFloat(ExpBinsID, _expBins);
+            material.SetFloat(LowestFrequencyID, _lowestFrequency);
         }
 
         foreach (var material in chronoMaterials)

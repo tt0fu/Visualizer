@@ -8,7 +8,7 @@ using Unity.Burst;
 public class ScaleXSetter : MonoBehaviour
 {
     private Image _image;
-    private static readonly int ScaleXid = PropertyToID("scale_x");
+    private static readonly int ScaleXid = PropertyToID("scaleX");
 
 
     private void Start()

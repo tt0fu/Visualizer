@@ -4,38 +4,47 @@
 # define X 1
 # define Y 1
 # define Z 1
-float exp_bins;
-float sample_rate;
-float lowest_frequency;
-uint dft_iteration_count;
+float expBins;
+float sampleRate;
+float lowestFrequency;
 StructuredBuffer<float> samples;
-uint samples_size;
-uint samples_start;
-RWStructuredBuffer<float3> dft;
+uint samplesSize;
+uint samplesStart;
+RWStructuredBuffer<float2> dft;
 
 float get_sample(uint index) {
-    return samples.Load((index + samples_start) % samples_size);
+    return samples.Load((index + samplesStart) % samplesSize);
 }
 
-void calculate_dft(int note) {
+float BlackmanNuttallWindow(float sampleIndex, float windowSize) {
+    float arg = UNITY_TWO_PI * sampleIndex / windowSize;
+    return (sampleIndex >= 0) * (sampleIndex <= windowSize) *
+    (0.3635819 -
+        0.4891775 * cos(arg) +
+        0.1365995 * cos(2 * arg) -
+        0.0106411 * cos(3 * arg));
+}
+
+void calculate_dft(int bin) {
     float2 amplitude = 0;
-    float phase_delta = ((pow(2, note / exp_bins) * lowest_frequency) / sample_rate) * UNITY_TWO_PI;
-    float cur_phase = -phase_delta * dft_iteration_count;
-
-    float halfWindowSize = 4.0 / (phase_delta / UNITY_TWO_PI);
+    float frequency = pow(2, bin / expBins) * lowestFrequency;
+    float samplePeriod = sampleRate / frequency;
+    float phaseDelta = UNITY_TWO_PI / samplePeriod;
+    float windowSize = 8 * samplePeriod;
+    float curPhase = 0;
     float totalWindow = 0;
-    for (uint sample_index = 0; sample_index < dft_iteration_count; sample_index++) {
-        float window = max(
-            0, (dft_iteration_count - sample_index) * (2 - (dft_iteration_count - sample_index) / (halfWindowSize)));
+    uint iterCount = min(samplesSize, windowSize);
+    for (uint sampleIndex = 0; sampleIndex < iterCount; sampleIndex++) {
+        float window = BlackmanNuttallWindow(sampleIndex, windowSize);
 
-        float2 sinCos;
-        sincos(cur_phase, sinCos.x, sinCos.y);
+        float2 cosSin;
+        sincos(curPhase, cosSin.y, cosSin.x);
 
-        amplitude += sinCos * get_sample(samples_size - sample_index - 1) * window;
+        amplitude += get_sample(sampleIndex) * window * cosSin;
         totalWindow += window;
-        cur_phase += phase_delta;
+        curPhase += phaseDelta;
     }
-    dft[note] = float3(length(amplitude) / totalWindow, amplitude);
+    dft[bin] = amplitude / totalWindow;
 }
 
 [numthreads(X,Y,Z)]
