@@ -86,7 +86,7 @@ public class AudioReader : MonoBehaviour
         var maxBin = _dftSize;
         for (var i = 0; i < _dftSize; i++)
         {
-            var cur = math.length(_dft[i]);
+            var cur = math.length(_dft[i]) * (_dftSize - i);
             if (cur < max)
             {
                 continue;

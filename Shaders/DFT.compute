@@ -16,14 +16,15 @@ float get_sample(uint index) {
     return samples.Load((index + samplesStart) % samplesSize);
 }
 
-float BlackmanNuttallWindow(float sampleIndex, float windowSize) {
-    float arg = UNITY_TWO_PI * sampleIndex / windowSize;
-    return (sampleIndex >= 0) * (sampleIndex <= windowSize) *
+float BlackmanNuttallWindow(float factor) {
+    float arg = UNITY_TWO_PI * factor;
+    return (factor >= 0) * (factor <= 1) *
     (0.3635819 -
         0.4891775 * cos(arg) +
         0.1365995 * cos(2 * arg) -
         0.0106411 * cos(3 * arg));
 }
+
 
 void calculate_dft(int bin) {
     float2 amplitude = 0;
@@ -33,9 +34,8 @@ void calculate_dft(int bin) {
     float windowSize = 8 * samplePeriod;
     float curPhase = 0;
     float totalWindow = 0;
-    uint iterCount = min(samplesSize, windowSize);
-    for (uint sampleIndex = 0; sampleIndex < iterCount; sampleIndex++) {
-        float window = BlackmanNuttallWindow(sampleIndex, windowSize);
+    for (uint sampleIndex = 0; sampleIndex < samplesSize; sampleIndex++) {
+        float window = BlackmanNuttallWindow((sampleIndex - (samplesSize - windowSize) / 2) / windowSize);
 
         float2 cosSin;
         sincos(curPhase, cosSin.y, cosSin.x);
