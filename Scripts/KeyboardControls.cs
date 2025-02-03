@@ -32,11 +32,11 @@ public class KeyboardControls : MonoBehaviour
                 _audioReader.waveScale = Math.Clamp(_audioReader.waveScale - 0.05f, 0f, 10f);
                 break;
             case KeyCode.RightArrow:
-                value = waveformMaterial.GetFloat(WidthID) + 5;
+                value = waveformMaterial.GetFloat(WidthID) + 1;
                 waveformMaterial.SetFloat(WidthID, Math.Clamp(value, 0, 200));
                 break;
             case KeyCode.LeftArrow:
-                value = waveformMaterial.GetFloat(WidthID) - 5;
+                value = waveformMaterial.GetFloat(WidthID) - 1;
                 waveformMaterial.SetFloat(WidthID, Math.Clamp(value, 0, 200));
                 break;
             case KeyCode.F1:

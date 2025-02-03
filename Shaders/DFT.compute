@@ -31,7 +31,7 @@ void calculate_dft(int bin) {
     float frequency = pow(2, bin / expBins) * lowestFrequency;
     float samplePeriod = sampleRate / frequency;
     float phaseDelta = UNITY_TWO_PI / samplePeriod;
-    float windowSize = 8 * samplePeriod;
+    float windowSize = min(8 * samplePeriod, samplesSize);
     float curPhase = 0;
     float totalWindow = 0;
     for (uint sampleIndex = 0; sampleIndex < samplesSize; sampleIndex++) {
