@@ -1,11 +1,11 @@
 Shader "Oklab linear rainbow" {
     Properties {
         [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
-        _Mask ("Texture", 2D) = "white" {}
+        _Mask ("Mask", 2D) = "white" {}
         _MaskCutoff("Mask cutoff", Range(0, 1)) = 0.05
-        _Lightness("Lightness", Range(0, 2)) = 0.5
-        _Chroma("Chroma", Range(0, 2)) = 0.5
-        _RainbowScale("Rainbow scale", Range(0, 10)) = 0.5
+        _Lightness("Lightness", Range(0, 2)) = 0.7
+        _Chroma("Chroma", Range(0, 2)) = 0.1
+        _RainbowRepeats("Rainbow repeats", Range(0, 10)) = 0.5
         _TimeScale("Time scale", Range(0, 10)) = 0.5
         _ChronoScale("Chrono scale", Range(0, 10)) = 0.5
         _Direction("Direction", Range(0, 1)) = 0
@@ -44,7 +44,7 @@ Shader "Oklab linear rainbow" {
 
             float _Lightness;
             float _Chroma;
-            float _RainbowScale;
+            float _RainbowRepeats;
             float _TimeScale;
             float _ChronoScale;
             float _Direction;
@@ -62,7 +62,7 @@ Shader "Oklab linear rainbow" {
                 float2 dir = float2(cos(_Direction * UNITY_TWO_PI), sin(_Direction * UNITY_TWO_PI));
                 float p = dot(i.uv, dir);
                 float t = _Time.y * _TimeScale + chrono * _ChronoScale;
-                float hue = (p - t) * _RainbowScale;
+                float hue = (p - t) * _RainbowRepeats;
                 float3 col = rainbow(hue);
                 return float4(col, 1);
             }

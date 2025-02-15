@@ -1,8 +1,8 @@
 Shader "Oklab radial rainbow" {
     Properties {
         [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
-        _Lightness("Lightness", Range(0, 2)) = 0.5
-        _Chroma("Chroma", Range(0, 2)) = 0.5
+        _Lightness("Lightness", Range(0, 2)) = 0.7
+        _Chroma("Chroma", Range(0, 2)) = 0.1
         _RainbowScale("Rainbow scale", Range(0, 10)) = 0.5
         _TimeScale("Time scale", Range(0, 10)) = 0.5
         _ChronoScale("Chrono scale", Range(0, 10)) = 0.5

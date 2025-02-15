@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Stripes rainbow
-  m_Shader: {fileID: 4800000, guid: edc2d1bf3f08d634e8c3e07c1bc486cc, type: 3}
+  m_Shader: {fileID: 4800000, guid: 76c892180faf7754d9d22d975c9ffc2f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -34,12 +34,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _Chroma: 0.1
-    - _ChronoScale: 5
-    - _Direction: 0.25
+    - _ChronoScale: 1
     - _Lightness: 0.7
-    - _MaskCutoff: 0.7
-    - _RainbowScale: 1
+    - _MaskCutoff: 0.05
+    - _RainbowChronoTimeScale: 1
+    - _RainbowRepeats: 2
     - _TimeScale: 0.1
+    - _WarpChronoTimeScale: 1
+    - _WarpScale: 10
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Logo rainbow
+  m_Name: Booth rainbow
   m_Shader: {fileID: 4800000, guid: 76c892180faf7754d9d22d975c9ffc2f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Mask:
-        m_Texture: {fileID: 2800000, guid: 23ef7ec869719794dbb381b760cfe49d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
@@ -41,7 +41,7 @@ Material:
     - _RainbowRepeats: 2
     - _TimeScale: 0.1
     - _WarpChronoTimeScale: 1
-    - _WarpScale: 2
+    - _WarpScale: 3
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

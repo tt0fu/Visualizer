@@ -6,11 +6,14 @@ Shader "Waveform" {
         [ToggleUI] _Debug ("Debug mode", Int) = 0
         [ToggleUI] _DisableStabilization ("Disable stabilization", Int) = 0
         [ToggleUI] _Rainbow ("Rainbow", Int) = 0
-        _Lightness("Lightness", Range(0, 2)) = 0.5
-        _Chroma("Chroma", Range(0, 2)) = 0.5
-        _RainbowScale("Rainbow scale", Range(0, 10)) = 0.5
-        _TimeScale("Time scale", Range(0, 10)) = 0.5
-        _ChronoScale("Chrono scale", Range(0, 10)) = 0.5
+        _Lightness("Lightness", Range(0, 2)) = 0.7
+        _Chroma("Chroma", Range(0, 2)) = 0.1
+        _RainbowRepeats("Rainbow repeats", Range(0, 10)) = 2
+        _TimeScale("Time scale", Range(0, 10)) = 0.1
+        _ChronoScale("Chrono scale", Range(0, 10)) = 1
+        _WarpScale("Warp scale", Range(0, 20)) = 5
+        _WarpChronoTimeScale("Warp chrono+time scale", Range(0, 10)) = 1
+        _RainbowChronoTimeScale("Rainbow chrono+time scale", Range(0, 10)) = 1
     }
     CGINCLUDE
     #pragma vertex vert
@@ -57,9 +60,12 @@ Shader "Waveform" {
             bool _Rainbow;
             float _Lightness;
             float _Chroma;
-            float _RainbowScale;
+            float _RainbowRepeats;
             float _TimeScale;
             float _ChronoScale;
+            float _WarpScale;
+            float _WarpChronoTimeScale;
+            float _RainbowChronoTimeScale;
 
             float RawSample(int sample_index) {
                 if (!_DisableStabilization) {
@@ -126,13 +132,30 @@ Shader "Waveform" {
                 return color * Fade(abs(sample_index - target) * scaleX / _Width);
             }
 
+            #define rand(p)  frac(sin(1e3*dot(p,float3(1,57,-13.7)))*4375.5453)
+
+            float noise3(float3 x) {
+                float3 p = floor(x), f = frac(x);
+
+                f = f * f * (3. - 2. * f); // smoothstep
+
+                return lerp(lerp(lerp(rand(p+float3(0,0,0)), rand(p+float3(1,0,0)), f.x), // triilinear
+                                 lerp(rand(p+float3(0,1,0)), rand(p+float3(1,1,0)), f.x), f.y),
+                            lerp(lerp(rand(p+float3(0,0,1)), rand(p+float3(1,0,1)), f.x),
+                                lerp(rand(p+float3(0,1,1)), rand(p+float3(1,1,1)), f.x), f.y), f.z);
+            }
+
+            #define noise(x) (noise3(x)+noise3(x+11.5)) / 2.
+
             #include "Oklab rainbow.cginc"
 
             float4 frag(FragData pixel) :SV_Target {
                 float3 baseCol = float3(1, 1, 1);
                 if (_Rainbow) {
-                    float t = _Time.y * _TimeScale + chrono * _ChronoScale;
-                    float hue = (pixel.uv.x - t) * _RainbowScale;
+                    float chronoTime = _Time.y * _TimeScale + chrono * _ChronoScale;
+                    float p = noise(float3(pixel.uv * float2(scaleX, 1) * _WarpScale,
+                                           (chronoTime * _WarpChronoTimeScale) % 1000));
+                    float hue = (p + chronoTime * _RainbowChronoTimeScale) * _RainbowRepeats;
                     baseCol = rainbow(hue);
                 }
                 float3 col = baseCol * Fade(WaveDistance(pixel.uv) * samplesSize / _Width);

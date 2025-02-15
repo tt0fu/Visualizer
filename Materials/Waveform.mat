@@ -30,14 +30,18 @@ Material:
     m_Ints: []
     m_Floats:
     - _Chroma: 0.1
-    - _ChronoScale: 2
+    - _ChronoScale: 1
     - _Debug: 0
     - _DisableStabilization: 0
     - _Height: 1
     - _Lightness: 0.7
     - _Rainbow: 1
+    - _RainbowChronoTimeScale: 1
+    - _RainbowRepeats: 2
     - _RainbowScale: 1
     - _TimeScale: 0.1
+    - _WarpChronoTimeScale: 1
+    - _WarpScale: 1
     - _Width: 11
     m_Colors: []
   m_BuildTextureStacks: []
