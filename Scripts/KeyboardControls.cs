@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using static UnityEngine.Shader;
 using Unity.Burst;
+using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 [BurstCompile(CompileSynchronously = true)]
 [RequireComponent(typeof(AudioReader))]
@@ -10,7 +12,7 @@ public class KeyboardControls : MonoBehaviour
     private static readonly int WidthID = PropertyToID("_Width");
     private static readonly int DebugID = PropertyToID("_Debug");
     private static readonly int DisableStabilizationID = PropertyToID("_DisableStabilization");
-    public Material waveformMaterial;
+    [SerializeField] private Material waveformMaterial;
     private AudioReader _audioReader;
 
     public void Start()
@@ -44,6 +46,15 @@ public class KeyboardControls : MonoBehaviour
                 break;
             case KeyCode.F2:
                 waveformMaterial.SetInt(DisableStabilizationID, 1 - waveformMaterial.GetInt(DisableStabilizationID));
+                break;
+            case KeyCode.Alpha1:
+                SceneManager.LoadScene(0);
+                break;
+            case KeyCode.Alpha2:
+                SceneManager.LoadScene(1);
+                break;
+            case KeyCode.Alpha3:
+                SceneManager.LoadScene(2);
                 break;
             default:
                 return;

@@ -36,7 +36,7 @@ Material:
     - _Chroma: 0.1
     - _ChronoScale: 1
     - _Lightness: 0.7
-    - _MaskCutoff: 0.05
+    - _MaskCutoff: 0.5
     - _RainbowChronoTimeScale: 1
     - _RainbowRepeats: 2
     - _TimeScale: 0.1
