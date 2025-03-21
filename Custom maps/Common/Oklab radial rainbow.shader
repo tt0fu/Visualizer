@@ -48,13 +48,17 @@ Shader "Oklab radial rainbow" {
 
             #include "Assets/Shaders/Oklab rainbow.cginc"
 
+            float3 Rainbow(float hue) {
+                return lch2rgb(float3(_Lightness, _Chroma, hue));
+            }
+
             float4 frag(FragData i) : SV_Target {
                 float2 uv = i.uv - float2(0.5, 0.5);
                 uv.x *= scaleX;
                 float2 p = uv;
                 float t = _Time.y * _TimeScale + chrono * _ChronoScale;
                 float hue = (length(p) - t) * _RainbowScale;
-                float3 col = rainbow(hue);
+                float3 col = Rainbow(hue);
                 return float4(col, 1);
             }
             ENDCG

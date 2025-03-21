@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Lasp;
 using UnityEngine;
 using static UnityEngine.Shader;
@@ -28,6 +29,7 @@ public class AudioReader : MonoBehaviour
     private float _lowestFrequency;
     private int _expBins;
     private float2[] _dft;
+    private float[] _magnitudes;
     private CircularArray<float> _samples;
     private float _chrono;
     private float _period;
@@ -44,7 +46,7 @@ public class AudioReader : MonoBehaviour
     [SerializeField] private int samplesSize = 4096;
     [SerializeField] private ComputeShader dftComputeShader;
 
-    [SerializeField] [Range(0.0f, 10f)] public float waveScale = 2.5f;
+    [SerializeField] [Range(0.0f, 50f)] public float waveScale = 2.5f;
 
     [SerializeField] [Range(0.0f, 1.0f)] private float focusPoint = 0.5f;
     [SerializeField] [Range(1, 4096)] private int dftSize = 512;
@@ -58,6 +60,7 @@ public class AudioReader : MonoBehaviour
         _dftSize = dftSize;
         _samplesSize = samplesSize;
         _dft = new float2[_dftSize];
+        _magnitudes = new float[_dftSize];
         _samples = new CircularArray<float>(_samplesSize);
         _lowestFrequency = _sampleRate / _samplesSize;
         _chrono = 0;
@@ -84,17 +87,19 @@ public class AudioReader : MonoBehaviour
     private void UpdatePeriod()
     {
         var max = 0.0f;
-        var maxBin = _dftSize;
         for (var i = 0; i < _dftSize; i++)
         {
-            var cur = math.length(_dft[i]) * (_dftSize * 2 - i);
-            if (cur < max)
-            {
-                continue;
-            }
+            max = Mathf.Max(max, _magnitudes[i]);
+        }
 
-            max = cur;
-            maxBin = i;
+        var maxBin = 1;
+        for (;
+             maxBin < _dftSize - 1 &&
+             (_magnitudes[maxBin] < _magnitudes[maxBin + 1] ||
+              _magnitudes[maxBin] < _magnitudes[maxBin - 1] ||
+              _magnitudes[maxBin] < max * 0.5);
+             maxBin++)
+        {
         }
 
         var frequency = Mathf.Pow(2, (float)maxBin / _expBins) * _lowestFrequency;
@@ -106,6 +111,12 @@ public class AudioReader : MonoBehaviour
     private void UpdateSamples()
     {
         var newSamples = _tracker.audioDataSlice;
+        waveScale *= (1 + Time.deltaTime / 50);
+        foreach (var sample in newSamples)
+        {
+            waveScale = Math.Min(waveScale, 0.95f / Math.Abs(sample));
+        }
+
         for (var i = 0; i < newSamples.Length; i++)
         {
             newSamples[i] *= waveScale;
@@ -130,6 +141,11 @@ public class AudioReader : MonoBehaviour
         dftComputeShader.SetBuffer(0, DftID, _dftBuffer);
         dftComputeShader.Dispatch(0, _dftSize, 1, 1);
         _dftBuffer.GetData(_dft);
+
+        for (var i = 0; i < _dftSize; i++)
+        {
+            _magnitudes[i] = math.length(_dft[i]);
+        }
     }
 
     private void UpdateChrono()

@@ -53,6 +53,10 @@ Shader "Oklab linear rainbow" {
 
             #include "Assets/Shaders/Oklab rainbow.cginc"
 
+            float3 Rainbow(float hue) {
+                return lch2rgb(float3(_Lightness, _Chroma, hue));
+            }
+
             float4 frag(FragData i) : SV_Target {
                 float mask = tex2D(_Mask, i.uv);
                 if (mask < _MaskCutoff) {
@@ -63,7 +67,7 @@ Shader "Oklab linear rainbow" {
                 float p = dot(i.uv, dir);
                 float t = _Time.y * _TimeScale + chrono * _ChronoScale;
                 float hue = (p - t) * _RainbowRepeats;
-                float3 col = rainbow(hue);
+                float3 col = Rainbow(hue);
                 return float4(col, 1);
             }
             ENDCG

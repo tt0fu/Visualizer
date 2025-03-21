@@ -132,32 +132,24 @@ Shader "Waveform" {
                 return color * Fade(abs(sample_index - target) * scaleX / _Width);
             }
 
-            #define rand(p)  frac(sin(1e3*dot(p,float3(1,57,-13.7)))*4375.5453)
-
-            float noise3(float3 x) {
-                float3 p = floor(x), f = frac(x);
-
-                f = f * f * (3. - 2. * f); // smoothstep
-
-                return lerp(lerp(lerp(rand(p+float3(0,0,0)), rand(p+float3(1,0,0)), f.x), // triilinear
-                                 lerp(rand(p+float3(0,1,0)), rand(p+float3(1,1,0)), f.x), f.y),
-                            lerp(lerp(rand(p+float3(0,0,1)), rand(p+float3(1,0,1)), f.x),
-                                lerp(rand(p+float3(0,1,1)), rand(p+float3(1,1,1)), f.x), f.y), f.z);
-            }
-
-            #define noise(x) (noise3(x)+noise3(x+11.5)) / 2.
-
             #include "Oklab rainbow.cginc"
 
+            #include "Noise.cginc"
+
+            float3 Rainbow(float hue) {
+                return lch2rgb(float3(_Lightness, _Chroma, hue));
+            }
+
+            float3 RandomRainbow(float2 uv) {
+                float chronoTime = _Time.y * _TimeScale + chrono * _ChronoScale;
+                float p = noise(float3(uv * float2(scaleX, 1) * _WarpScale,
+                    (chronoTime * _WarpChronoTimeScale) % 1000));
+                float hue = (p + chronoTime * _RainbowChronoTimeScale) * _RainbowRepeats;
+                return Rainbow(hue);
+            }
+
             float4 frag(FragData pixel) :SV_Target {
-                float3 baseCol = float3(1, 1, 1);
-                if (_Rainbow) {
-                    float chronoTime = _Time.y * _TimeScale + chrono * _ChronoScale;
-                    float p = noise(float3(pixel.uv * float2(scaleX, 1) * _WarpScale,
-                                           (chronoTime * _WarpChronoTimeScale) % 1000));
-                    float hue = (p + chronoTime * _RainbowChronoTimeScale) * _RainbowRepeats;
-                    baseCol = rainbow(hue);
-                }
+                float3 baseCol = _Rainbow ? RandomRainbow(pixel.uv) : float3(1, 1, 1);
                 float3 col = baseCol * Fade(WaveDistance(pixel.uv) * samplesSize / _Width);
                 if (_Debug) {
                     float sampleIndex = pixel.uv.x * samplesSize;

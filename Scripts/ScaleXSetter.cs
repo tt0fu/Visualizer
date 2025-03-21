@@ -4,21 +4,21 @@ using static UnityEngine.Shader;
 using Unity.Burst;
 
 [BurstCompile(CompileSynchronously = true)]
-[RequireComponent(typeof(Image))]
+[RequireComponent(typeof(Graphic))]
 public class ScaleXSetter : MonoBehaviour
 {
-    private Image _image;
+    private Graphic _graphic;
     private static readonly int ScaleXid = PropertyToID("scaleX");
 
 
     private void Start()
     {
-        _image = GetComponent<Image>();
+        _graphic = GetComponent<Graphic>();
     }
 
     private void Update()
     {
-        var rect = _image.rectTransform.rect;
-        _image.material.SetFloat(ScaleXid, rect.width / rect.height);
+        var rect = _graphic.rectTransform.rect;
+        _graphic.material.SetFloat(ScaleXid, rect.width / rect.height);
     }
 }

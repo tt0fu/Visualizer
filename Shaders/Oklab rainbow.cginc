@@ -56,7 +56,3 @@ float3 hueshift(float3 rgb, float shift) {
     lch.b = frac(lch.b + shift + 1);
     return lch2rgb(lch);
 }
-
-float3 rainbow(float hue) {
-    return lch2rgb(float3(_Lightness, _Chroma, hue));
-}

@@ -406,7 +406,7 @@ RectTransform:
   m_GameObject: {fileID: 446339482}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: -2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 323346725}
@@ -414,7 +414,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 357, y: -197.5}
-  m_SizeDelta: {x: 200, y: 100}
+  m_SizeDelta: {x: 600, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &446339484
 MonoBehaviour:
@@ -442,7 +442,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 1
     m_MinSize: 1
-    m_MaxSize: 100
+    m_MaxSize: 300
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -820,7 +820,7 @@ MonoBehaviour:
   _filterType: 1
   _autoGain: 0
   _gain: 0
-  _dynamicRange: 20
+  _dynamicRange: 15
   _smoothFall: 1
   _fallSpeed: 0.5
   _propertyBinders:
@@ -836,8 +836,8 @@ MonoBehaviour:
         PropertyName: localScale
         _propertyType: UnityEngine.Vector3, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-        Value0: {x: 1, y: 1, z: 1}
-        Value1: {x: 1.5, y: 1.5, z: 1.5}
+        Value0: {x: 0.3, y: 0.3, z: 0.3}
+        Value1: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!114 &1126210542
 MonoBehaviour:
   m_ObjectHideFlags: 0

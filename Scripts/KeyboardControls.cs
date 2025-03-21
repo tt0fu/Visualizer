@@ -56,6 +56,24 @@ public class KeyboardControls : MonoBehaviour
             case KeyCode.Alpha3:
                 SceneManager.LoadScene(2);
                 break;
+            case KeyCode.Alpha4:
+                SceneManager.LoadScene(3);
+                break;
+            case KeyCode.Alpha5:
+                SceneManager.LoadScene(4);
+                break;
+            case KeyCode.Alpha6:
+                SceneManager.LoadScene(5);
+                break;
+            case KeyCode.Alpha7:
+                SceneManager.LoadScene(6);
+                break;
+            case KeyCode.Alpha8:
+                SceneManager.LoadScene(7);
+                break;
+            case KeyCode.Alpha9:
+                SceneManager.LoadScene(8);
+                break;
             default:
                 return;
         }
