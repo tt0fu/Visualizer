@@ -23,6 +23,7 @@ public class AudioReader : MonoBehaviour
     private static readonly int ExpBinsID = PropertyToID("expBins");
     private static readonly int SampleRateID = PropertyToID("sampleRate");
     private static readonly int LowestFrequencyID = PropertyToID("lowestFrequency");
+    private static readonly int BassID = PropertyToID("bass");
     private static readonly int ChronoID = PropertyToID("chrono");
     private int _dftSize;
     private int _samplesSize;
@@ -31,6 +32,7 @@ public class AudioReader : MonoBehaviour
     private float2[] _dft;
     private float[] _magnitudes;
     private CircularArray<float> _samples;
+    private float _bass;
     private float _chrono;
     private float _period;
     private float2 _phase;
@@ -42,6 +44,7 @@ public class AudioReader : MonoBehaviour
     [SerializeField] private Material[] dftMaterials;
     [SerializeField] private Material[] waveformMaterials;
     [SerializeField] private Material[] chronoMaterials;
+    [SerializeField] private Material[] channelMaterials;
 
     [SerializeField] private int samplesSize = 4096;
     [SerializeField] private ComputeShader dftComputeShader;
@@ -151,7 +154,8 @@ public class AudioReader : MonoBehaviour
     private void UpdateChrono()
     {
         _tracker.gain = 10 * Mathf.Log10(waveScale);
-        _chrono += Time.deltaTime * _tracker.normalizedLevel;
+        _bass = _tracker.normalizedLevel;
+        _chrono += Time.deltaTime * _bass;
     }
 
     private void UpdateMaterials()
@@ -177,6 +181,11 @@ public class AudioReader : MonoBehaviour
         foreach (var material in chronoMaterials)
         {
             material.SetFloat(ChronoID, _chrono);
+        }
+
+        foreach (var material in channelMaterials)
+        {
+            material.SetFloat(BassID, _bass);
         }
     }
 

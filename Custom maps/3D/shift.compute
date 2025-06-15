@@ -1,0 +1,54 @@
+﻿#pragma kernel CSMain
+#include <UnityCG.cginc>
+
+# define X 1
+# define Y 1
+# define Z 1
+float expBins;
+float sampleRate;
+float lowestFrequency;
+StructuredBuffer<float> samples;
+uint samplesSize;
+uint samplesStart;
+RWStructuredBuffer<float2> dft;
+
+float get_sample(uint index) {
+    return samples.Load((index + samplesStart) % samplesSize);
+}
+
+float BlackmanNuttallWindow(float factor) {
+    float arg = UNITY_TWO_PI * factor;
+    return (factor >= 0) * (factor <= 1) *
+    (0.3635819 -
+        0.4891775 * cos(arg) +
+        0.1365995 * cos(2 * arg) -
+        0.0106411 * cos(3 * arg));
+}
+
+
+void calculate_dft(int bin) {
+    float2 amplitude = 0;
+    float frequency = pow(2, bin / expBins) * lowestFrequency;
+    float samplePeriod = sampleRate / frequency;
+    float phaseDelta = UNITY_TWO_PI / samplePeriod;
+    float windowSize = min(8 * samplePeriod, samplesSize);
+    float curPhase = 0;
+    float totalWindow = 0;
+    for (uint sampleIndex = 0; sampleIndex < samplesSize; sampleIndex++) {
+        float window = BlackmanNuttallWindow((sampleIndex - (samplesSize - windowSize) / 2) / windowSize);
+
+        float2 cosSin;
+        sincos(curPhase, cosSin.y, cosSin.x);
+
+        amplitude += get_sample(sampleIndex) * window * cosSin;
+        totalWindow += window;
+        curPhase += phaseDelta;
+    }
+    dft[bin] = amplitude / totalWindow;
+}
+
+[numthreads(X,Y,Z)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+    uint index = id.x + id.y * X + id.z * X * Y;
+    calculate_dft(index);
+}

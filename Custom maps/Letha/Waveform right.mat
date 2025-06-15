@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Waveform
+  m_Name: Waveform right
   m_Shader: {fileID: 4800000, guid: 863b149bb32b1ac48a81be87dc7d0e60, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -33,7 +33,7 @@ Material:
     - _ChronoScale: 1
     - _Debug: 0
     - _DisableStabilization: 0
-    - _FlipX: 0
+    - _FlipX: 1
     - _FlipY: 0
     - _Height: 1
     - _Lightness: 0.7
@@ -44,7 +44,7 @@ Material:
     - _TimeScale: 0.1
     - _WarpChronoTimeScale: 1
     - _WarpScale: 1
-    - _Width: 32
+    - _Width: 23
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

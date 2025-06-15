@@ -14,6 +14,8 @@ Shader "Waveform" {
         _WarpScale("Warp scale", Range(0, 20)) = 5
         _WarpChronoTimeScale("Warp chrono+time scale", Range(0, 10)) = 1
         _RainbowChronoTimeScale("Rainbow chrono+time scale", Range(0, 10)) = 1
+        [ToggleUI] _FlipX ("Flip X", Int) = 0
+        [ToggleUI] _FlipY ("Flip Y", Int) = 0
     }
     CGINCLUDE
     #pragma vertex vert
@@ -66,6 +68,8 @@ Shader "Waveform" {
             float _WarpScale;
             float _WarpChronoTimeScale;
             float _RainbowChronoTimeScale;
+            bool _FlipX;
+            bool _FlipY;
 
             float RawSample(int sample_index) {
                 if (!_DisableStabilization) {
@@ -149,10 +153,11 @@ Shader "Waveform" {
             }
 
             float4 frag(FragData pixel) :SV_Target {
-                float3 baseCol = _Rainbow ? RandomRainbow(pixel.uv) : float3(1, 1, 1);
-                float3 col = baseCol * Fade(WaveDistance(pixel.uv) * samplesSize / _Width);
+                float2 uv = pixel.uv * float2(1 - 2 * _FlipX, 1 - 2 * _FlipY) + float2(_FlipX, _FlipY);
+                float3 baseCol = _Rainbow ? RandomRainbow(uv) : float3(1, 1, 1);
+                float3 col = baseCol * Fade(WaveDistance(uv) * samplesSize / _Width);
                 if (_Debug) {
-                    float sampleIndex = pixel.uv.x * samplesSize;
+                    float sampleIndex = uv.x * samplesSize;
                     if (!_DisableStabilization) {
                         sampleIndex += centerSample - samplesSize * focus;
                     }
