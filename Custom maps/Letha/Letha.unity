@@ -470,7 +470,7 @@ MonoBehaviour:
   _gain: 0
   _dynamicRange: 15
   _smoothFall: 1
-  _fallSpeed: 0.5
+  _fallSpeed: 0
   _propertyBinders:
   - rid: 7872889338915979265
   references:
