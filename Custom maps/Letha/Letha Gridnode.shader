@@ -73,13 +73,17 @@ Shader "Letha Gridnode" {
             }
 
             float DFTLerp(float x) {
-                return DFT(lerp(Bin(30), Bin(150), x));;
+                return DFT(lerp(Bin(30), Bin(100), x));
             }
 
             #include "../../Shaders/Oklab rainbow.cginc"
 
             float3 Rainbow(float hue) {
                 return lch2rgb(float3(_Lightness, _Chroma, hue));
+            }
+
+            float3 RainbowChrono(float x) {
+                return Rainbow(frac(chrono * 2 + x * 0.5));
             }
 
             float4 frag(FragData pixel) :SV_Target {
@@ -118,7 +122,7 @@ Shader "Letha Gridnode" {
                     if (7 <= channel && channel <= 9) {
                         // red, green, blue
                         channel -= 7;
-                        float3 col = Rainbow(frac(chrono * 2 + x * 1.0));
+                        float3 col = RainbowChrono(x);
                         return channel == 0 ? col.r : channel == 1 ? col.g : col.b;
                     }
                     if (channel == 10) {
@@ -150,7 +154,7 @@ Shader "Letha Gridnode" {
                     if (1 <= channel && channel <= 3) {
                         // red, green, blue
                         channel -= 1;
-                        float3 col = Rainbow(frac(chrono * 2 + x * 1.0));
+                        float3 col = RainbowChrono(x);
                         return channel == 0 ? col.r : channel == 1 ? col.g : col.b;
                     }
                     if (channel == 4) {

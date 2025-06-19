@@ -11,4 +11,4 @@ float noise3(float3 x) {
                     lerp(rand(p+float3(0,1,1)), rand(p+float3(1,1,1)), f.x), f.y), f.z);
 }
 
-#define noise(x) (noise3(x)+noise3(x+11.5)) / 2.
+#define noise(x) (noise3(sin(x))+noise3(cos(1.618 * x)+11.5)) / 2.
