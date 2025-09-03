@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Miau Gridnode
+  m_Name: Gray venue Gridnode
   m_Shader: {fileID: 4800000, guid: 4abbb183a069a4b4d86a2766285c9db2, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0

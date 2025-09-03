@@ -1,4 +1,10 @@
-﻿float3 rgb2lab(float3 rgb) {
+﻿#include "UnityCG.cginc"
+
+float3 rgb2lab(float3 rgb) {
+    if (IsGammaSpace()) {
+        rgb = GammaToLinearSpace(rgb);
+    }
+
     float3x3 M1 = float3x3(
         +0.4122214708, +0.5363325363, +0.0514459929,
         +0.2119034982, +0.6806995451, +0.1073969566,
@@ -29,7 +35,11 @@ float3 lab2rgb(float3 lab) {
     );
     float3 lms_ = mul(M2_inv, lab);
     float3 lms = lms_ * lms_ * lms_;
-    return mul(M1_inv, lms);
+    float3 rgb = mul(M1_inv, lms);
+    if (IsGammaSpace()) {
+        return LinearToGammaSpace(rgb);
+    }
+    return rgb;
 }
 
 float3 lch2lab(float3 lch) {

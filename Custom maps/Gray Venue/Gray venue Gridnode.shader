@@ -1,4 +1,4 @@
-Shader "Miau Gridnode" {
+Shader "Gray venue Gridnode" {
     Properties {
         [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
         _Lightness("Lightness", Range(0, 2)) = 0.7
@@ -109,12 +109,12 @@ Shader "Miau Gridnode" {
                 }
                 if (channel == 2 || channel == 3) {
                     // Tilt, Tilt fine
-                    float tilt = 0.25 + clamp(dft * 1.5, 0, 0.5);
+                    float tilt = 0.33 + clamp(dft, 0, 0.5);
                     return SplitFine(tilt, channel - 2);
                 }
                 if (channel == 4) {
                     // Zoom
-                    return dft * 1.5;
+                    return dft * 2;
                 }
                 if (channel == 5) {
                     // Dimmer
@@ -180,7 +180,7 @@ Shader "Miau Gridnode" {
                 }
                 if (channel == 3) {
                     // Width
-                    return dft * 0.5;
+                    return dft * 2 - 0.6;
                 }
                 if (channel == 4) {
                     // Flatness
@@ -192,7 +192,7 @@ Shader "Miau Gridnode" {
                 }
                 if (channel == 6) {
                     // Spin Speed
-                    return 0.8;
+                    return 0;
                 }
                 if (7 <= channel && channel <= 9) {
                     // red, green, blue
@@ -208,7 +208,7 @@ Shader "Miau Gridnode" {
                 }
                 if (channel == 12) {
                     // Pan/Tilt Speed
-                    return 0.5;
+                    return 0;
                 }
                 return 0;
             }
