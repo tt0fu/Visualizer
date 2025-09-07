@@ -50,6 +50,7 @@ public class AudioReader : MonoBehaviour
     [SerializeField] private ComputeShader dftComputeShader;
 
     [SerializeField] [Range(0.0f, 50f)] public float waveScale = 2.5f;
+    [SerializeField] [Range(0.0f, 1f)] public float waveScaleRegain = 0.04f;
 
     [SerializeField] [Range(0.0f, 1.0f)] private float focusPoint = 0.5f;
     [SerializeField] [Range(1, 4096)] private int dftSize = 512;
@@ -114,7 +115,7 @@ public class AudioReader : MonoBehaviour
     private void UpdateSamples()
     {
         var newSamples = _tracker.audioDataSlice;
-        waveScale *= (1 + Time.deltaTime / 50);
+        waveScale *= (1 + Time.deltaTime * waveScaleRegain);
         foreach (var sample in newSamples)
         {
             waveScale = Math.Min(waveScale, 0.95f / Math.Abs(sample));

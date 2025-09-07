@@ -109,7 +109,7 @@ Shader "Gray venue Gridnode" {
                 }
                 if (channel == 2 || channel == 3) {
                     // Tilt, Tilt fine
-                    float tilt = 0.33 + clamp(dft, 0, 0.5);
+                    float tilt = 0.33 + clamp(dft, 0, 0.4);
                     return SplitFine(tilt, channel - 2);
                 }
                 if (channel == 4) {
@@ -143,7 +143,7 @@ Shader "Gray venue Gridnode" {
                 return 0;
             }
 
-            float Light(uint lightId, uint channel) {
+            float ParLight(uint lightId, uint channel) {
                 lightId %= 8;
                 float x = float(lightId) / 8;
                 float dft = DFTBass(x);
@@ -168,7 +168,7 @@ Shader "Gray venue Gridnode" {
                 float dft = DFTBass(x);
                 if (channel == 0) {
                     // Pan
-                    return 0.8;
+                    return 1 - dft * 1.5;
                 }
                 if (channel == 1) {
                     // Tilt
@@ -200,7 +200,7 @@ Shader "Gray venue Gridnode" {
                 }
                 if (channel == 10) {
                     // Dimmer
-                    return dft * 4 - 0.7;
+                    return dft * 4 - 0.5;
                 }
                 if (channel == 11) {
                     // Beam Thickness
@@ -221,7 +221,7 @@ Shader "Gray venue Gridnode" {
                 }
                 if (id < 13 * 16 + 5 * 16) {
                     id -= 13 * 16;
-                    return Light(id / 5, id % 5);
+                    return ParLight(id / 5, id % 5);
                 }
                 if (id < 13 * 16 + 5 * 16 + 13 * 16) {
                     id -= 13 * 16 + 5 * 16;
