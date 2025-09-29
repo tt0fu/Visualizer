@@ -143,7 +143,7 @@ public class AudioReader : MonoBehaviour
         dftComputeShader.SetInt(SamplesStartID, _samples.Start);
 
         dftComputeShader.SetBuffer(0, DftID, _dftBuffer);
-        dftComputeShader.Dispatch(0, _dftSize, 1, 1);
+        dftComputeShader.Dispatch(0, _dftSize / 256, 1, 1);
         _dftBuffer.GetData(_dft);
 
         for (var i = 0; i < _dftSize; i++)

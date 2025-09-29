@@ -1,7 +1,7 @@
 #pragma kernel CSMain
 #include <UnityCG.cginc>
 
-# define X 1
+# define X 256
 # define Y 1
 # define Z 1
 float expBins;

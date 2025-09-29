@@ -31,11 +31,12 @@ Material:
     m_Floats:
     - _Chroma: 0.1
     - _ChronoScale: 1
-    - _Debug: 0
+    - _Debug: 1
     - _DisableStabilization: 0
+    - _Discard: 1
     - _FlipX: 0
     - _FlipY: 0
-    - _Height: 1
+    - _Height: 0.9
     - _Lightness: 0.7
     - _Rainbow: 1
     - _RainbowChronoTimeScale: 1
@@ -44,7 +45,7 @@ Material:
     - _TimeScale: 0.1
     - _WarpChronoTimeScale: 1
     - _WarpScale: 1
-    - _Width: 32
+    - _Width: 50
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

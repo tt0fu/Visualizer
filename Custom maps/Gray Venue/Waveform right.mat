@@ -44,7 +44,7 @@ Material:
     - _TimeScale: 0.1
     - _WarpChronoTimeScale: 1
     - _WarpScale: 1
-    - _Width: 23
+    - _Width: 50
     m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

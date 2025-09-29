@@ -518,6 +518,7 @@ MonoBehaviour:
   samplesSize: 4096
   dftComputeShader: {fileID: 7200000, guid: 4f3e1b8a172a74440ac404a8547ada74, type: 3}
   waveScale: 1
+  waveScaleRegain: 0.04
   focusPoint: 0.5
   dftSize: 512
 --- !u!114 &1126210540

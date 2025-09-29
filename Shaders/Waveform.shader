@@ -3,7 +3,7 @@ Shader "Waveform" {
         [HideInInspector] _MainTex ("Texture", 2D) = "white" {}
         _Width ("Width", Range(1, 200)) = 20
         _Height ("Height", Range(0, 10)) = 1.0
-        [ToggleUI] _Debug ("Debug mode", Int) = 0
+        //        [ToggleUI] _Debug ("Debug mode", Int) = 0
         [ToggleUI] _DisableStabilization ("Disable stabilization", Int) = 0
         [ToggleUI] _Rainbow ("Rainbow", Int) = 0
         _Lightness("Lightness", Range(0, 2)) = 0.7
@@ -41,8 +41,15 @@ Shader "Waveform" {
 
     SubShader {
         Tags {
-            "RenderType" = "Opaque"
+            "Queue" = "Transparent"
+            "RenderType" = "Transparent"
+            "IgnoreProjector" = "True"
+            "PreviewType"="Plane"
         }
+
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
+
         Pass {
             CGPROGRAM
             #pragma fragment frag
@@ -57,7 +64,7 @@ Shader "Waveform" {
 
             float _Width;
             float _Height;
-            bool _Debug;
+            // bool _Debug;
             bool _DisableStabilization;
             bool _Rainbow;
             float _Lightness;
@@ -78,7 +85,7 @@ Shader "Waveform" {
                 if (sample_index < 0) {
                     sample_index += period * ceil((0 - sample_index) / period);
                 }
-                if (sample_index >= samplesSize) {
+                if (sample_index >= (int)samplesSize) {
                     sample_index -= period * ceil((sample_index - samplesSize + 1) / period);
                 }
 
@@ -91,7 +98,8 @@ Shader "Waveform" {
 
             float Fade(const float dist) {
                 const float x = clamp(dist, 0, 1);
-                return 1 - sqrt(1 - (x - 1) * (x - 1));
+                return 1 - (x * x);
+                // return 1 - sqrt(1 - (x - 1) * (x - 1));
             }
 
             float PseudoCross(float2 a, float2 b) {
@@ -132,9 +140,9 @@ Shader "Waveform" {
                 return mn;
             }
 
-            float3 DebugBarColor(float sample_index, float target, float3 color) {
-                return color * Fade(abs(sample_index - target) * scaleX / _Width);
-            }
+            // float DebugBarFade(float sample_index, float target) {
+            //     return Fade(abs(sample_index - target) * scaleX / _Width);
+            // }
 
             #include "Oklab rainbow.cginc"
 
@@ -155,17 +163,21 @@ Shader "Waveform" {
             float4 frag(FragData pixel) :SV_Target {
                 float2 uv = pixel.uv * float2(1 - 2 * _FlipX, 1 - 2 * _FlipY) + float2(_FlipX, _FlipY);
                 float3 baseCol = _Rainbow ? RandomRainbow(uv) : float3(1, 1, 1);
-                float3 col = baseCol * Fade(WaveDistance(uv) * samplesSize / _Width);
-                if (_Debug) {
-                    float sampleIndex = uv.x * samplesSize;
-                    if (!_DisableStabilization) {
-                        sampleIndex += centerSample - samplesSize * focus;
-                    }
-                    col += DebugBarColor(sampleIndex, centerSample, float3(1, 0, 0));
-                    col += DebugBarColor(sampleIndex, centerSample - period / 2, float3(0, 1, 0));
-                    col += DebugBarColor(sampleIndex, centerSample + period / 2, float3(0, 1, 0));
-                }
-                return float4(col, 1);
+                float fade = Fade(WaveDistance(uv) * samplesSize / _Width);
+                // float3 col = baseCol * fade;
+                // if (_Debug) {
+                //     float sampleIndex = uv.x * samplesSize;
+                //     if (!_DisableStabilization) {
+                //         sampleIndex += centerSample - samplesSize * focus;
+                //     }
+                //     float centerFade = DebugBarFade(sampleIndex, centerSample);
+                //     float periodFade = DebugBarFade(sampleIndex, centerSample - period / 2) +
+                //         DebugBarFade(sampleIndex, centerSample + period / 2);
+                //     fade += centerFade + periodFade;
+                //     col += centerFade * float3(1, 0, 0);
+                //     col += periodFade * float3(0, 1, 0);
+                // }
+                return float4(baseCol, fade);
             }
             ENDCG
         }
